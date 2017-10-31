@@ -1,0 +1,121 @@
+1.	Query
+select Id [User Link], Age, DisplayName, Location
+from Users
+where Location like '%##Location##%'
+order by age
+
+Result
+
+Age 40
+Yaniv Ran
+Victoria, BC, Canada
+
+Age 44
+Brad BARCLAY
+Victoria, BC, Canada
+
+Age 48
+ravenshill
+Victoria, BC, Canada
+
+Age 48
+rmm
+Victoria, BC, Canada
+
+Age 49
+Lee Hammond
+Victoria, BC, Canada
+
+Age 50
+Shrawan
+Victoria, BC, Canada/New York, NY
+
+Age 51
+yyyguy
+Victoria, BC, Canada
+
+Age 57
+AutomatonTec
+Victoria, BC, Canada
+
+Age 58
+blueinc spatial
+Victoria, BC, Canada
+
+Age 69
+Eric O
+Victoria, BC, Canada
+
+2. Query
+select distinct Users.Id [User Link], Users.Reputation
+from Users
+join Posts
+  on Posts.OwnerUserId = Users.Id
+where Users.Location like '%##Location##%'
+and Posts.Tags like '%##Tags##%'
+order by Users.Reputation desc
+
+Result
+User link										      Reputation
+Kevin Sylvestre
+                                  23990
+aardvarkk
+                                  7984
+Jonathon Watney
+                                  4234
+Bodman
+                                  4122
+Matthew Lehner
+                                  2957
+mtpultz
+                                  2778
+Tyler Sebastian
+                                  2347
+Steve Adams
+                                  2051
+Iain Duncan
+                                  1024
+Jasmeet
+                                  968
+
+
+3. Query
+SELECT TOP 100
+    Users.Id,
+    DisplayName,
+    Location,
+    Count(Posts.Id) AS Answers,
+    AVG(CAST(Score AS float)) AS AcceptedAnswer
+FROM Posts
+    INNER JOIN Users ON Users.Id = OwnerUserId
+WHERE Location like '%##Location##%'
+GROUP BY Users.Id, DisplayName, Location
+HAVING Count(Posts.Id) > 5
+ORDER BY AcceptedAnswer DESC
+
+Result 
+Display Name: Jonathon Watney, Slashterix, Bodman, Nick Rempel, Kevin Sylvestre
+Location: Victoria, BC. Canada
+Answers: 40, 12, 67, 36, 647
+Percentage Accepted: 18.8, 5.83, 5.67, 4.55, 4.17
+
+4.  Query
+SELECT TOP 100
+    Users.Id,
+    DisplayName,
+    Location,
+    Count(Posts.Id) AS Answers,
+    AVG(CAST(Score AS float)) AS [Percentage Accepted]
+FROM Posts
+    INNER JOIN Users ON Users.Id = OwnerUserId
+WHERE Location like '%##Location##%'
+      and Posts.Tags like '%##Tags##%'
+GROUP BY Users.Id, DisplayName, Location
+HAVING Count(Posts.Id) > 5
+ORDER BY [Percentage Accepted] DESC
+
+Result – Could only find 4
+DisplayName: Ty H, AkshayKhot, Jody Heavener, mtpults
+Location: Victoria, BC, Canada
+Answers: 10, 20, 22, 43
+Percentage Accepted: -0.2, 0.95, 1.63, 1.67
